@@ -1,16 +1,25 @@
 package fluxandmono;
 
 import org.junit.jupiter.api.Test;
+import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
+
+import java.time.Duration;
+import java.util.Comparator;
+import java.util.function.LongConsumer;
 
 public class FluxAndMonoTest {
 
     @Test
     public void testFlux(){
         //Subscription --> request() ---->onNext() ----> onComplete()
-       Flux<String> fluxString =  Flux.just("Talari","Lokesh","Kumar").log();
-       fluxString.subscribe(System.out::println);
+//       Flux<String> fluxString =  Flux.just("Talari","Lokesh","Kumar").log();
+//       fluxString.subscribe(System.out::println);
+
+        Publisher<String> fluxString1 =  Flux.just("Talari","Lokesh","Kumar","Ravi").log();
+//        ((Flux<String>) fluxString1).subscribe(System.out::println,err-> System.out.println(err.getMessage()),()-> System.out.println("completed"));
+       ((Flux<String>) fluxString1).collectSortedList(Comparator.naturalOrder()).subscribe(System.out::println);
 
     }
 
@@ -70,6 +79,18 @@ public class FluxAndMonoTest {
                 .expectError()
         .verify();
 
+    }
+
+
+    @Test
+    public void  multipeSubscribers(){
+        Flux<String> fluxString =  Flux.just("Talari","Lokesh","Kumar");
+
+        int  i=0;
+        while(i < 10){
+            fluxString.log("Step ::"+i).subscribe(System.out::println);
+            i++;
+        }
     }
 
 

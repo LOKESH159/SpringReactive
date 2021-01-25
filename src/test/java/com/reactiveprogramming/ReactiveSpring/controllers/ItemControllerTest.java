@@ -56,11 +56,4 @@ class ItemControllerTest {
 
     }
 
-    @Test
-    void getItemById_UsingRetrieve() {
-       webTestClient.get().uri(uriBuilder -> uriBuilder.path("/item/{id}").build("101"));
-
-        WebClient.create("").get().exchange().
-
-    }
 }
